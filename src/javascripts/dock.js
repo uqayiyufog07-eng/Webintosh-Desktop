@@ -31,7 +31,8 @@ function init() {
             });
             img.addEventListener("mouseup", () => {
                 img.style.filter = "brightness(1)";
-                create("assets/apps/"+app+".html");
+                create("assets/apps/"+app+".html", light);
+                light.classList.add("on");
             });
         } else {
             let hr = document.createElement("hr");

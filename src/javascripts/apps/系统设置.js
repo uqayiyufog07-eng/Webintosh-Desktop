@@ -1,3 +1,6 @@
+import { createAlert } from '../ui/alert.js';
+
+let window_settings = document.querySelector(".window[settings]");
 let selectionIcons = document.querySelectorAll(".left .list .selection div.icon");
 let selections = document.querySelectorAll(".left .list .selection");
 let rightTitle = document.querySelector(".right .toolbar p");
@@ -20,13 +23,30 @@ selections.forEach(selection => {
         selection.classList.add("focus");
         nowSelection = selection;
 
-        let pageId = selection.querySelector("div").getAttribute("icon").replace("../assets/images/", "").replace(".svg", "");
+        let pageId = selection.querySelector("div").getAttribute("icon").replace("../assets/images/", "").replace("../assets/icons/", "");
+        if (pageId.includes(".svg")) {
+            pageId = pageId.replace(".svg", "");
+        } else if (pageId.includes(".jpeg")) {
+            pageId = pageId.replace(".jpeg", "");
+        } else if (pageId.includes(".png")) {
+            pageId = pageId.replace(".png", "");
+        } else {
+            createAlert("./assets/icons/访达.svg", "系统设置遇到问题。", "Selection 图标拓展名不支持", "好", "close");
+        }
         let nextPage = document.getElementById(pageId);
 
         nowPage.classList.remove("focus");
         nextPage.classList.add("focus");
         nowPage = nextPage;
 
-        rightTitle.textContent = selection.querySelector("p").textContent;
+        rightTitle.textContent = selection.querySelector("p:not(.title)").textContent;
     });
 });
+
+function close_window(light) {
+    window_settings.style.display = "none";
+    setTimeout(() => {
+        document.body.removeChild(window);
+    }, 50);
+    light.classList.remove("on");
+}

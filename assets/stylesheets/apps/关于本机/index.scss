@@ -107,20 +107,12 @@
         margin-right: 8px;
     }
 
-    .yellow {
+    .gray {
         width: 12px;
         height: 12px;
         border-radius: 6px;
-        background: #febc2e;
+        background: rgba(0, 0, 0, 0.1);
         border: solid 0.5px rgba(0, 0, 0, 0.2);
         margin-right: 8px;
-    }
-
-    .green {
-        width: 12px;
-        height: 12px;
-        border-radius: 6px;
-        background: #28c840;
-        border: solid 0.5px rgba(0, 0, 0, 0.2);
     }
 }

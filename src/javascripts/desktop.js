@@ -148,15 +148,12 @@ resize();
 window.addEventListener("dragenter", (event) => {
     console.log('dragenter');
     event.preventDefault();
-    cursor.classList.add("copy");
 });
 window.addEventListener("dragleave", (event) => {
     event.preventDefault();
-    cursor.classList.remove("copy");
 });
 window.addEventListener("dragend", (event) => {
     event.preventDefault();
-    cursor.classList.remove("copy");
 });
 window.addEventListener("dragover", (event) => {
     event.preventDefault();

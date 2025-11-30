@@ -1,6 +1,6 @@
 import { createAlert } from "./ui/alert.js";
 
-export function create(file) {
+export function create(file, light) {
     fetch(file)
         .then(response => {
             if (response.status !== 200) {
@@ -13,6 +13,7 @@ export function create(file) {
                     document.querySelector(".container").innerHTML += content;
                     let script = document.createElement("script");
                     script.src = `./src/javascripts/apps/${cleanFile}.js`;
+                    script.type = "module";
                     document.body.appendChild(script);
                     let link = document.createElement("link");
                     link.rel = "stylesheet";
@@ -23,26 +24,72 @@ export function create(file) {
         .catch(error => {
             console.error('Error opening app:', error);
         });
-    resetWindowListeners();
+    setTimeout(() => {
+        resetWindowListeners(light);
+    }, 50);
 }
 
-function resetWindowListeners() {
+function resetWindowListeners(light) {
     let windows = document.querySelectorAll(".window");
-    windows.forEach(window => {
-        let closeBtn = window.querySelector(".wintools .red");
-        let miniBtn = window.querySelector(".wintools .yellow");
-        let zoomBtn = window.querySelector(".wintools .green");
+    windows.forEach(win => {
+        let closeBtn = win.querySelector(".wintools .red");
+        let miniBtn = win.querySelector(".wintools .yellow");
+        let zoomBtn = win.querySelector(".wintools .green");
+
+        const closeWindow = () => {
+            win.remove();
+            light.classList.remove("on");
+        };
+
+        win._closeWindow = closeWindow;
 
         closeBtn.addEventListener("click", () => {
-            console.log("Clicked close");
+            closeWindow();
         });
         miniBtn.addEventListener("click", () => {
-            console.log("Clicked close");
+            console.log("Clicked minimize");
         });
         zoomBtn.addEventListener("click", () => {
-            console.log("Clicked close");
+            console.log("Clicked maximize");
         });
+
+        addWindowDrag(win);
     });
 }
 
-resetWindowListeners();
+function addWindowDrag(windowElement) {
+    let isDragging = false;
+    let offsetX, offsetY;
+
+    const titleBar = windowElement;
+
+    titleBar.addEventListener('mousedown', function (e) {
+        isDragging = true;
+
+        offsetX = e.clientX - windowElement.getBoundingClientRect().left;
+        offsetY = e.clientY - windowElement.getBoundingClientRect().top;
+
+        windowElement.style.zIndex = 1000;
+        e.preventDefault();
+    });
+
+    document.addEventListener('mousemove', function (e) {
+        if (!isDragging) return;
+
+        let newX = e.clientX - offsetX;
+        let newY = e.clientY - offsetY;
+
+        const maxX = window.innerWidth - windowElement.offsetWidth;
+        const maxY = window.innerHeight - windowElement.offsetHeight;
+
+        newX = Math.max(0, Math.min(newX, maxX));
+        newY = Math.max(document.querySelector(".finderbar").offsetHeight, Math.min(newY, maxY));
+
+        windowElement.style.left = newX + 'px';
+        windowElement.style.top = newY + 'px';
+    });
+
+    document.addEventListener('mouseup', function () {
+        isDragging = false;
+    });
+}

@@ -1,4 +1,4 @@
-let appMenu = [
+export let appMenu = [
     "访达", "文件", "编辑", "显示", "前往", "窗口", "帮助"
 ];
 let appControl = [
@@ -32,7 +32,7 @@ appControlContainer.appendChild(timeControl);
 
 let openingMenu = null;
 
-function updateMenu() {
+export function updateMenu() {
     appMenu.forEach((menu, index) => {
         let nowMenu = document.createElement("p");
         nowMenu.innerHTML = menu;

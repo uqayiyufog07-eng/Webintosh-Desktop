@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>可自由拖动的长方形</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            margin: 0;
+            padding: 20px;
+            overflow: hidden;
+        }
+        
+        .draggable-rectangle {
+            width: 200px;
+            height: 120px;
+            background: linear-gradient(135deg, #3498db, #2c3e50);
+            border-radius: 8px;
+            position: absolute;
+            cursor: move;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+            user-select: none;
+            transition: box-shadow 0.3s ease;
+            border: 2px solid #fff;
+        }
+        
+        .draggable-rectangle:hover {
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+        
+        .draggable-rectangle:active {
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.4);
+        }
+        
+        .instructions {
+            position: absolute;
+            bottom: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            text-align: center;
+        }
+        
+        .instructions h2 {
+            margin-top: 0;
+            color: #2c3e50;
+        }
+        
+        .instructions p {
+            margin: 8px 0;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="draggable-rectangle" id="draggableRectangle">
+        拖拽我
+    </div>
+    
+    <div class="instructions">
+        <h2>可拖动长方形</h2>
+        <p>点击并拖动长方形到任意位置</p>
+        <p>长方形会自动限制在窗口边界内</p>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const rectangle = document.getElementById('draggableRectangle');
+            let isDragging = false;
+            let offsetX, offsetY;
+            
+            // 初始化位置 - 居中显示
+            rectangle.style.left = (window.innerWidth - rectangle.offsetWidth) / 2 + 'px';
+            rectangle.style.top = (window.innerHeight - rectangle.offsetHeight) / 2 + 'px';
+            
+            // 鼠标按下事件 - 开始拖动
+            rectangle.addEventListener('mousedown', function(e) {
+                isDragging = true;
+                
+                // 计算鼠标在元素内的偏移量
+                offsetX = e.clientX - rectangle.getBoundingClientRect().left;
+                offsetY = e.clientY - rectangle.getBoundingClientRect().top;
+                
+                // 设置元素样式
+                rectangle.style.cursor = 'grabbing';
+                rectangle.style.zIndex = 1000;
+                
+                e.preventDefault();
+            });
+            
+            // 鼠标移动事件 - 更新位置
+            document.addEventListener('mousemove', function(e) {
+                if (!isDragging) return;
+                
+                // 计算新位置
+                let newX = e.clientX - offsetX;
+                let newY = e.clientY - offsetY;
+                
+                // 限制在窗口边界内
+                const maxX = window.innerWidth - rectangle.offsetWidth;
+                const maxY = window.innerHeight - rectangle.offsetHeight;
+                
+                newX = Math.max(0, Math.min(newX, maxX));
+                newY = Math.max(0, Math.min(newY, maxY));
+                
+                // 应用新位置
+                rectangle.style.left = newX + 'px';
+                rectangle.style.top = newY + 'px';
+            });
+            
+            // 鼠标释放事件 - 结束拖动
+            document.addEventListener('mouseup', function() {
+                if (isDragging) {
+                    isDragging = false;
+                    rectangle.style.cursor = 'move';
+                    rectangle.style.zIndex = '';
+                }
+            });
+            
+            // 窗口大小改变时调整位置
+            window.addEventListener('resize', function() {
+                const rect = rectangle.getBoundingClientRect();
+                
+                // 如果元素超出窗口边界，调整位置
+                if (rect.right > window.innerWidth || rect.bottom > window.innerHeight) {
+                    const maxX = window.innerWidth - rectangle.offsetWidth;
+                    const maxY = window.innerHeight - rectangle.offsetHeight;
+                    
+                    let newX = Math.min(parseInt(rectangle.style.left), maxX);
+                    let newY = Math.min(parseInt(rectangle.style.top), maxY);
+                    
+                    rectangle.style.left = Math.max(0, newX) + 'px';
+                    rectangle.style.top = Math.max(0, newY) + 'px';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
