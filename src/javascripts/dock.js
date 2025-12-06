@@ -31,8 +31,12 @@ function init() {
             });
             img.addEventListener("mouseup", () => {
                 img.style.filter = "brightness(1)";
-                create("./assets/apps/"+app+".html", light);
-                light.classList.add("on");
+                img.classList.add("opening");
+                setTimeout(() => {
+                    img.classList.remove("opening");
+                    light.classList.add("on");
+                    create("./assets/apps/"+app+".html", light);
+                }, 2400);
             });
         } else {
             let hr = document.createElement("hr");

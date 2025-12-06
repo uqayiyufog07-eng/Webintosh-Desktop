@@ -1,6 +1,7 @@
-export let appMenu = [
-    "访达", "文件", "编辑", "显示", "前往", "窗口", "帮助"
-];
+export let appMenu = {
+    "访达": ["文件", "编辑", "显示", "前往", "窗口", "帮助"],
+    "系统设置": ["编辑", "显示", "窗口", "帮助"]
+};
 let appControl = [
     "switch.2", "magnifyingglass", "wifi"
 ]
@@ -32,13 +33,15 @@ appControlContainer.appendChild(timeControl);
 
 let openingMenu = null;
 
-export function updateMenu() {
-    appMenu.forEach((menu, index) => {
+export function updateMenu(app) {
+    let appMenuElement = document.createElement("p");
+    appMenuElement.innerHTML = app;
+    appMenuElement.classList.add("appname");
+    appMenuContainer.appendChild(appMenuElement);
+    appMenu[app].forEach((menu, index) => {
         let nowMenu = document.createElement("p");
+        index = index + 1;
         nowMenu.innerHTML = menu;
-        if (index == 0) {
-            nowMenu.classList.add("appname");
-        }
         appMenuContainer.appendChild(nowMenu);
     });
     resetMenuHandle();
@@ -122,7 +125,7 @@ function updateTime() {
     dateControl.innerHTML = `${hours}:${minutes}`;
 }
 
-updateMenu();
+updateMenu("访达");
 updateControl();
 updateTime();
 setInterval(updateTime, 1000);

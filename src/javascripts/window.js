@@ -1,5 +1,7 @@
 import { createAlert } from "./ui/alert.js";
 
+let fd = document.querySelector(".finderbar")
+
 export function create(file, light) {
     fetch(file)
         .then(response => {
@@ -10,7 +12,7 @@ export function create(file, light) {
             response.text()
                 .then((content) => {
                     let cleanFile = file.split("/").pop().split(".")[0];
-                    document.querySelector(".container").innerHTML += content;
+                    document.body.innerHTML += content;
                     let script = document.createElement("script");
                     script.src = `./src/javascripts/apps/${cleanFile}.js`;
                     script.type = "module";
@@ -25,11 +27,15 @@ export function create(file, light) {
             console.error('Error opening app:', error);
         });
     setTimeout(() => {
+        fd.style.height = "24px";
+        if (Array.from(fd.classList).includes("macbook")) {
+            fd.style.height = "35px";
+        }
         resetWindowListeners(light);
-    }, 50);
+    }, 150);
 }
 
-function resetWindowListeners(light) {
+export function resetWindowListeners(light) {
     let windows = document.querySelectorAll(".window");
     windows.forEach(win => {
         let closeBtn = win.querySelector(".wintools .red");

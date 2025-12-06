@@ -86,12 +86,13 @@
     <script type="module">
         import { clickMenuItem } from "./src/javascripts/ui/menu.js";
         import { parentMenuStates } from "./src/javascripts/finderbar.js";
-        import { create } from "./src/javascripts/window.js";
+        import { create, resetWindowListeners } from "./src/javascripts/window.js";
 
         window.moduleItems = {
             clickMenuItem: clickMenuItem,
             parentMenuStates: parentMenuStates,
-            create: create
+            create: create,
+            resetWindowListeners: resetWindowListeners
         }
     </script>
 </body>

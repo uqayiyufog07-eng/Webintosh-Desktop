@@ -1,6 +1,6 @@
 .finderbar {
-  width: 100%;
-  height: 24px;
+  width: 100vw;
+  height: 24px !important;
   /* M2+ MacBook 35px, normal Mac 24px */
   -webkit-backdrop-filter: blur(50px) saturate(0.8);
           backdrop-filter: blur(50px) saturate(0.8);
@@ -12,9 +12,12 @@
   -webkit-user-select: none;
      -moz-user-select: none;
           user-select: none;
+  position: fixed;
+  top: 0;
+  left: 0;
 }
 .finderbar.macbook {
-  height: 35px;
+  height: 35px !important;
 }
 .finderbar.black-text .left {
   color: black;

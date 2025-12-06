@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>macOS 弹跳效果</title>
+    <style>
+        body {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+
+        /* 改进的弹跳动画 - 模拟抛物线 */
+        @keyframes opening {
+            0% {
+                transform: translateY(0) scale(1);
+                animation-timing-function: cubic-bezier(0.28, 0.84, 0.42, 1);
+            }
+            20% {
+                transform: translateY(-40px) scale(1.1);
+                animation-timing-function: cubic-bezier(0.28, 0.84, 0.42, 1);
+            }
+            40% {
+                transform: translateY(0) scale(0.95);
+                animation-timing-function: cubic-bezier(0.28, 0.84, 0.42, 1);
+            }
+            60% {
+                transform: translateY(-20px) scale(1.05);
+                animation-timing-function: cubic-bezier(0.28, 0.84, 0.42, 1);
+            }
+            80% {
+                transform: translateY(0) scale(0.98);
+                animation-timing-function: cubic-bezier(0.28, 0.84, 0.42, 1);
+            }
+            100% {
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* 更自然的弹跳效果 - 弹性物理 */
+        @keymacOSBounce {
+            0% {
+                transform: translateY(0) scale(1);
+                animation-timing-function: ease-out;
+            }
+            15% {
+                transform: translateY(-60px) scale(1.12, 0.95);
+                animation-timing-function: ease-in;
+            }
+            30% {
+                transform: translateY(-20px) scale(1);
+                animation-timing-function: ease-out;
+            }
+            45% {
+                transform: translateY(-45px) scale(1.08, 0.96);
+                animation-timing-function: ease-in;
+            }
+            60% {
+                transform: translateY(-10px) scale(1);
+                animation-timing-function: ease-out;
+            }
+            75% {
+                transform: translateY(-25px) scale(1.04, 0.98);
+                animation-timing-function: ease-in;
+            }
+            85% {
+                transform: translateY(-5px) scale(1);
+                animation-timing-function: ease-out;
+            }
+            92% {
+                transform: translateY(-12px) scale(1.02, 0.99);
+                animation-timing-function: ease-in;
+            }
+            100% {
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* 简单抛物线效果 */
+        @keyframes parabola {
+            0% {
+                transform: translateY(0);
+                animation-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            }
+            50% {
+                transform: translateY(-60px);
+                animation-timing-function: cubic-bezier(0.55, 0.085, 0.68, 0.53);
+            }
+            90% {
+                transform: translateY(-15px);
+                animation-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            }
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+        .demo-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 40px;
+        }
+
+        .bounce-item {
+            border-radius: 14px;
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 24px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .bounce-item:hover {
+            transform: scale(1.05);
+        }
+
+        .item1 {
+            animation: opening 1.2s infinite;
+        }
+
+        .item2 {
+            animation: parabola 1.2s infinite;
+        }
+
+        .item3 {
+            animation: macOsBounce 1.2s infinite;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .info {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        h3 {
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+
+        p {
+            margin: 5px 0;
+            color: #666;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="demo-container">
+        <div class="info">
+            <h3>macOS 弹跳效果对比</h3>
+            <p>点击图标可以暂停/继续动画</p>
+        </div>
+        
+        <div class="bounce-item item1" onclick="toggleAnimation(this)">
+            <span>1</span>
+        </div>
+        <p>改进版抛物线</p>
+        
+        <div class="bounce-item item2" onclick="toggleAnimation(this)">
+            <span>2</span>
+        </div>
+        <p>简单抛物线</p>
+        
+        <div class="bounce-item item3" onclick="toggleAnimation(this)">
+            <span>3</span>
+        </div>
+        <p>macOS风格弹跳</p>
+        
+        <div class="controls">
+            <button onclick="toggleAllAnimations()">暂停/继续所有</button>
+            <button onclick="location.reload()">重置</button>
+        </div>
+    </div>
+
+    <script>
+        function toggleAnimation(element) {
+            if (element.style.animationPlayState === 'paused') {
+                element.style.animationPlayState = 'running';
+            } else {
+                element.style.animationPlayState = 'paused';
+            }
+        }
+
+        function toggleAllAnimations() {
+            const items = document.querySelectorAll('.bounce-item');
+            const isPaused = items[0].style.animationPlayState === 'paused';
+            
+            items.forEach(item => {
+                item.style.animationPlayState = isPaused ? 'running' : 'paused';
+            });
+        }
+
+        // 初始暂停状态，让用户点击开始
+        setTimeout(() => {
+            document.querySelectorAll('.bounce-item').forEach(item => {
+                item.style.animationPlayState = 'paused';
+            });
+        }, 500);
+    </script>
+</body>
+
+</html>
