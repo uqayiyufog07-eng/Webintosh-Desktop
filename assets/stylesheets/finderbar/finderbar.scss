@@ -43,12 +43,8 @@
         .logo {
             font-size: 16.3px;
             margin-left: 10px;
-            line-height: 20px;
-            border-radius: 4px;
-            width: 33px;
-            height: 100%;
-            text-align: center;
-            margin-right: 9px;
+            // width: 33px;
+            // margin-right: 9px;
         }
 
         .appname {
@@ -57,14 +53,17 @@
             font-size: 13px;
             /* margin-top: 0.75px; */
             letter-spacing: normal;
-            line-height: 16px;
             margin-left: 0;
         }
 
         p {
             font-size: 13.5px;
             letter-spacing: -0.2px;
-            margin-right: 21px;
+            padding: 0 10.5px;
+            border-radius: 4px;
+            height: 100%;
+            text-align: center;
+            line-height: 20px;
             font-family: "SFPro-Medium", "PingFangSC-Medium";
 
             &.active {

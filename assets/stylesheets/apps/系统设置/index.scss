@@ -394,24 +394,26 @@
 
                 div.wallpapercontainer {
                     width: calc(100% - 40px);
-                    margin: 20px;
+                    margin: 0 20px;
                     display: flex;
                     flex-direction: row;
                     // align-items: center;
-                    justify-content: space-between;
+                    justify-content: space-around;
 
                     div.right {
-                        width: 75%;
+                        width: 300px;
+                        display: flex;
 
                         .row {
+                            width: calc(100% - 20px);
                             margin: 0;
                         }
                     }
                 }
 
                 div.wallpaper {
-                    width: 128px;
-                    height: 72px;
+                    width: 150px;
+                    height: 80px;
                     background: url(../../../images/wallpaper.png);
                     background-size: cover;
                     background-position: center;

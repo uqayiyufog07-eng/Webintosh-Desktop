@@ -43,8 +43,8 @@ function closeLaunchpad() {
     bg.style.animation = "forwards";
     containers.style.animation = "forwards";
     setTimeout(() => {
-        bg.style.animation = "fade 0.35s ease-out forwards reverse";
-        containers.style.animation = "animation 0.4s ease-in-out forwards reverse";
+        bg.style.animation = "fade 0.3s ease-out forwards reverse";
+        containers.style.animation = "animation 0.35s ease-in-out forwards reverse";
         setTimeout(() => {
             document.querySelector("script[app=启动台]").remove();
             launchpad.remove();

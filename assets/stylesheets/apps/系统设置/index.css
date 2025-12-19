@@ -318,20 +318,22 @@
 }
 .settings .right .main .page div.wallpapercontainer {
   width: calc(100% - 40px);
-  margin: 20px;
+  margin: 0 20px;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: space-around;
 }
 .settings .right .main .page div.wallpapercontainer div.right {
-  width: 75%;
+  width: 300px;
+  display: flex;
 }
 .settings .right .main .page div.wallpapercontainer div.right .row {
+  width: calc(100% - 20px);
   margin: 0;
 }
 .settings .right .main .page div.wallpaper {
-  width: 128px;
-  height: 72px;
+  width: 150px;
+  height: 80px;
   background: url(../../../images/wallpaper.png);
   background-size: cover;
   background-position: center;
