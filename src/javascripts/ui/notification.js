@@ -3,12 +3,16 @@ let newNotificationTitle;
 let newNotificationText;
 let newNotificationTime;
 let newNotificationCommand;
+let audio = new Audio("./assets/sounds/alert.ogg");
 
 export function createNotification(icon, title, text, command, time = "now") {
+    audio.play();
+
     newNotification = document.createElement("c-notification");
     newNotification.iconpath = icon;
     newNotification.style.zIndex = 2048;
     newNotification.style.top = "34px";
+    newNotification.shadowRoot.querySelector("img").src = icon;
     newNotificationTitle = document.createElement("p");
     newNotificationTitle.setAttribute("slot", "title");
     newNotificationTitle.innerHTML = title;
@@ -18,13 +22,15 @@ export function createNotification(icon, title, text, command, time = "now") {
     newNotificationTime = document.createElement("p");
     newNotificationTime.setAttribute("slot", "time");
     newNotificationTime.innerHTML = time;
-    newNotificationCommand = new Function(command);
-    newNotification.addEventListener("click", newNotificationCommand);
+    newNotification.onclick = command;
     newNotification.appendChild(newNotificationTitle);
     newNotification.appendChild(newNotificationText);
     newNotification.appendChild(newNotificationTime);
     document.body.appendChild(newNotification);
-    // setTimeout(() => {
-    //     newNotification.remove();
-    // }, 5500);
+    setTimeout(() => {
+        newNotification.classList.add("close");
+        setTimeout(() => {
+            newNotification.remove();
+        }, 450);
+    }, 5500);
 }

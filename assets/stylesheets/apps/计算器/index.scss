@@ -11,6 +11,7 @@
     display: flex;
     flex-direction: column;
     position: absolute;
+
     .wintools {
         display: flex;
         gap: 8px;
@@ -21,12 +22,24 @@
             width: 12px;
             height: 12px;
             border-radius: 50%;
-            
-            &.red { background: #ff5f57; border: 0.5px solid #e33e32; }
-            &.yellow { background: #febc2e; border: 0.5px solid #df9f0a; }
-            &.green { background: #28c840; border: 0.5px solid #1c9e2d; }
+
+            &.red {
+                background: #ff5f57;
+                border: 0.5px solid #e33e32;
+            }
+
+            &.yellow {
+                background: #febc2e;
+                border: 0.5px solid #df9f0a;
+            }
+
+            &.green {
+                background: #28c840;
+                border: 0.5px solid #1c9e2d;
+            }
         }
     }
+
     .main {
         .display {
             width: 100%;
@@ -47,13 +60,16 @@
                 overflow: hidden;
             }
         }
+
         .buttons {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             grid-gap: 12px;
+
             button.calc {
                 display: none !important;
             }
+
             button {
                 width: 44px;
                 height: 44px;
@@ -68,34 +84,51 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
+
                 &:active {
                     filter: brightness(1.3);
                 }
-                &.seven, &.eight, &.nine,
-                &.four, &.five, &.six,
-                &.one, &.two, &.three,
-                &.zero, &.decimal {
+
+                &.seven,
+                &.eight,
+                &.nine,
+                &.four,
+                &.five,
+                &.six,
+                &.one,
+                &.two,
+                &.three,
+                &.zero,
+                &.decimal {
                     background-color: #333333;
                     color: white;
                 }
-                &.clear, &.plus-minus, &.percent {
+
+                &.clear,
+                &.plus-minus,
+                &.percent {
                     background-color: #a5a5a5;
                     color: black;
                     font-size: 18px;
                     font-weight: 500;
                 }
-                &.divide, &.multiply, &.subtract, &.add, &.equals {
+
+                &.divide,
+                &.multiply,
+                &.subtract,
+                &.add,
+                &.equals {
                     background-color: #ff9f0a;
                     color: white;
                     font-size: 24px;
-                    padding-bottom: 3px; 
+                    padding-bottom: 3px;
                 }
 
-                
+
                 &.zero {
                     grid-column: span 2;
-                    width: 100%; 
-                    border-radius: 22px; 
+                    width: 100%;
+                    border-radius: 22px;
                     justify-content: flex-start;
                     padding-left: 18px;
                     box-sizing: border-box;

@@ -9,7 +9,7 @@
     transform: rotate(720deg);
   }
 }
-body.cursor-default, body {
+body.cursor-default *, body * {
   cursor: url(../../cursors/default.svg), default !important;
 }
 body.cursor-beachball {

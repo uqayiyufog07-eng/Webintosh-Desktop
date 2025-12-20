@@ -97,11 +97,16 @@
             updateMenu: updateMenu
         }
 
-        setTimeout(() => {
-            createNotification("./assets/icons/访达.svg", "欢迎访问 Webintosh", "点击此通知前往 GitHub 存储库<br />5秒后将自动移除此通知", () => {
-                window.location.href = "github.com/mengobs/webintosh";
-            }, "now");
-        }, 250);
+        let clicked = false;
+
+        window.addEventListener("mousedown", () => {
+            if (!clicked) {
+                createNotification("./assets/icons/访达.svg", "欢迎访问 Webintosh", "点击此通知前往 GitHub 存储库<br />5 秒后将自动移除此通知", () => {
+                    window.location.href = "https://github.com/mengobs/webintosh";
+                }, "刚刚");
+                clicked = true;
+            }
+        });
     </script>
 </body>
 

@@ -14,7 +14,9 @@
 
 body {
     &.cursor-default, & {
-        cursor: url(../../cursors/default.svg), default !important;
+        * {
+            cursor: url(../../cursors/default.svg), default !important;
+        }
     }
 
     &.cursor-beachball {
