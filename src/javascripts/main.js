@@ -4,5 +4,5 @@ resetHeight();
 
 window.addEventListener('resize', resetHeight);
 window.addEventListener('orientationchange', resetHeight);
-
 window.addEventListener('load', resetHeight);
+

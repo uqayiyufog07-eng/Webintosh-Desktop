@@ -4,7 +4,7 @@ const tip = document.querySelector("body > div.tip");
 const defaultApps = [
     "访达", "启动台", "Safari浏览器", "信息", "邮件", "地图", "照片", "FaceTime通话",
     "日历", "通讯录", "提醒事项", "备忘录", "音乐", "视频", "播客", "News", "系统设置",
-    "hr", "Download_Folder", "废纸篓"
+    "hr", "下载_Folder", "废纸篓"
 ];
 let noAnimation = ["启动台", "访达"];
 let noMenuChanging = ["启动台"];
@@ -13,9 +13,11 @@ let appStatus = { "访达": true };
 window.appStatus = appStatus;
 export const dock = document.getElementById("dock");
 let imgs = dock.querySelectorAll(".container img");
-let autoHide = localStorage.getItem("dock-autohide") === "on";
+let autoHide = localStorage.getItem("dock-autohide") === "on" || false;
 let hideTimer = null;
 const DOCK_TRANSITION = "transform 0.4s cubic-bezier(0.25, 1, 0.5, 1)";
+let dock_zoom = false;
+
 function init() {
     defaultApps.forEach((app, index) => {
         let container = document.createElement("div");
@@ -26,6 +28,7 @@ function init() {
             img.alt = app;
             if (app.endsWith("Folder")) {
                 img.src = "./assets/icons/folder.svg";
+                img.alt = app.split("_")[0];
             }
             container.appendChild(img);
             let light = document.createElement("div");
@@ -84,11 +87,18 @@ function init() {
         }
         updateDockVisibility();
     });
+    if (!autoHide) {
+        setTimeout(() => {
+            dock.style.transition = DOCK_TRANSITION;
+        }, 1000);
+    }
+
+}
+function DockAutoHide() {
     document.addEventListener("mousemove", (e) => {
         if (!autoHide) return;
         const isAtBottom = window.innerHeight - e.clientY < 30;
-        const isHoveringDock = e.target.closest('#dock') || e.target.closest('.container');
-        if (isAtBottom || isHoveringDock) {
+        if (isAtBottom) {
             if (hideTimer) {
                 clearTimeout(hideTimer);
                 hideTimer = null;
@@ -111,13 +121,8 @@ function init() {
             }
         }
     });
-    if (!autoHide) {
-        setTimeout(() => {
-            dock.style.transition = DOCK_TRANSITION;
-        }, 1000);
-    }
-
 }
+
 function updateDockVisibility() {
     dock.style.transition = DOCK_TRANSITION;
     dock.style.animation = "none";
@@ -133,23 +138,57 @@ function updateDockVisibility() {
         dock.style.transform = "translateY(0)";
     }
 }
+
 function tipSetup() {
+    let currentImg = null;
+    let updateTipPosition = () => {
+        if (currentImg && tip && !dock.classList.contains("hidden")) {
+            const rect = currentImg.getBoundingClientRect();
+            const tipWidth = tip.offsetWidth;
+            tip.style.left = rect.left + rect.width / 2 - tipWidth / 2 + 'px';
+            tip.style.top = rect.top - 40 + 'px';
+            requestAnimationFrame(updateTipPosition);
+        }
+    };
     imgs.forEach(img => {
         img.addEventListener("mouseover", () => {
             if (tip && !dock.classList.contains("hidden")) {
-                tip.style.display = "block";
+                currentImg = img;
                 tip.textContent = img.alt;
+<<<<<<< HEAD
+                tip.style.display = "block";
+                tip.style.visibility = "hidden";
+                requestAnimationFrame(() => {
+                    tip.style.visibility = "visible";
+                    updateTipPosition();
+                });
+=======
+                
                 const rect = img.getBoundingClientRect();
-                tip.style.left = rect.left + rect.width / 2 - tip.offsetWidth / 2 + 'px';
-                tip.style.top = rect.top - 40 + 'px';
+                
+                if (!dock_zoom) {
+                    tip.style.left = rect.left + rect.width / 2 - tip.offsetWidth / 2 + 'px';
+                    tip.style.top = "616px";
+                } else {
+                    tip.style.left = rect.left + rect.width / 2 - tip.offsetWidth / 2 + 'px';
+                    tip.style.top = "580px";
+                }
+>>>>>>> 9357f4cbfcfe9de0cc22139c9d4e0dc85059ef91
             }
         });
+        
         img.addEventListener("mouseout", () => {
-            if (tip) tip.style.display = "none";
+            currentImg = null;
+            if (tip) {
+                tip.style.display = "none";
+                tip.style.visibility = "visible";
+            }
         });
     });
 }
+
 function DockAnimation() {
+    dock_zoom = true;
     const baseWidth = 50;
     const mouseRange = 200;
     const maxScale = 1.8;
@@ -195,7 +234,9 @@ function DockAnimation() {
     }
     animation();
 }
+
 init();
+DockAutoHide();
 DockAnimation();
-window.dispatchEvent(new CustomEvent("dock-autohide-change", { detail: "off" }))
+window.dispatchEvent(new CustomEvent("dock-autohide-change", { detail: "on" }))
 setTimeout(tipSetup, 500);

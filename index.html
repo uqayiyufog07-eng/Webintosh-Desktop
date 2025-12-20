@@ -11,8 +11,9 @@
     <link rel="stylesheet" href="./assets/stylesheets/dock/dock.css" />
     <link rel="stylesheet" href="./assets/stylesheets/main/desktop.css" />
     <link rel="stylesheet" href="./assets/stylesheets/cursor/cursor.css" />
-    <!-- <link rel="stylesheet" href="../assets/stylesheets/apps/main/window.css" /> -->
     <link rel="stylesheet" href="./assets/stylesheets/ui/ui.css">
+    <link rel="stylesheet" href="./assets/stylesheets/ui/contextMenu.css">
+    <link rel="stylesheet" href="./assets/stylesheets/apps/safari.css">
 </head>
 
 <body class="cursor-default">
@@ -43,9 +44,11 @@
 
     <!-- Menus -->
     <div class="menu" menu="logo" style="width: 240px;" nomatchapp="yes">
-        <p onclick="moduleItems.clickMenuItem(this)" cmd="moduleItems.create('./assets/apps/关于本机.html')" target="关于本机">关于本机</p>
+        <p onclick="moduleItems.clickMenuItem(this)" cmd="moduleItems.create('./assets/apps/关于本机.html')" target="关于本机">
+            关于本机</p>
         <hr />
-        <p onclick="moduleItems.clickMenuItem(this)" cmd="moduleItems.create('./assets/apps/系统设置.html')" target="系统设置">系统设置...</p>
+        <p onclick="moduleItems.clickMenuItem(this)" cmd="moduleItems.create('./assets/apps/系统设置.html')" target="系统设置">
+            系统设置...</p>
         <p>App Store...</p>
         <hr />
         <p>最近使用的项目</p>

@@ -1,13 +1,45 @@
 import { finderbar } from './finderbar.js';
 import { dock } from './dock.js';
-
-let containerList = []
+import { createContextMenu, createDesktopFile } from './ui/contextMenu.js';
 
 const desktop = document.getElementById("desktop");
 const containers = document.querySelectorAll(".desktop .container");
+let containerList = []
+
 containers.forEach((container) => {
     containerList.push(container);
 })
+
+document.addEventListener("mousedown", (e) => {
+    if (!e.target.closest(".item") && !e.target.closest(".context-menu")) {
+        document.querySelectorAll(".item.selected").forEach(el => el.classList.remove("selected"));
+    }
+});
+
+document.addEventListener("contextmenu", (e) => {
+    const isDesktopArea = e.target === desktop ||
+        e.target.classList.contains("container") ||
+        e.target.classList.contains("wallpaper") ||
+        e.target.classList.contains("desktop");
+
+    if (isDesktopArea) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        document.querySelectorAll(".item.selected").forEach(el => el.classList.remove("selected"));
+
+        createContextMenu(e.clientX, e.clientY, [
+            { label: "新建文件夹", action: () => createDesktopFile("folder", "新建文件夹") },
+            { label: "新建文本文档", action: () => createDesktopFile("file", "新建文本文档.txt") },
+            { type: "separator" },
+            { label: "粘贴", disabled: true },
+            { type: "separator" },
+            { label: "查看显示选项", action: () => console.log("查看显示选项") },
+            { label: "排列方式", action: () => console.log("排列方式") },
+        ]);
+    }
+});
+
 
 function getThumb(file) {
     return new Promise(resolve => {
@@ -65,6 +97,8 @@ function addFile(file) {
         name.innerHTML = file.name;
         item.appendChild(icon);
         item.appendChild(name);
+        item.style.cursor = "grab";
+        makeDraggable(item);
         containerList[containerList.length - 1].appendChild(item);
         getIcon(file, (src) => {
             console.log(src)
@@ -81,6 +115,8 @@ function addFile(file) {
         name.innerHTML = file.name;
         item.appendChild(icon);
         item.appendChild(name);
+        item.style.cursor = "grab";
+        makeDraggable(item);
         containerList.push(container);
         container.appendChild(item);
         getIcon(file, (src) => {
@@ -99,6 +135,8 @@ function addFolder(folder) {
         name.innerHTML = folder.name;
         item.appendChild(icon);
         item.appendChild(name);
+        item.style.cursor = "grab";
+        makeDraggable(item);
         containerList[containerList.length - 1].appendChild(item);
     } else {
         let container = document.createElement("div");
@@ -111,9 +149,47 @@ function addFolder(folder) {
         name.innerHTML = folder.name;
         item.appendChild(icon);
         item.appendChild(name);
+        item.style.cursor = "grab";
+        makeDraggable(item);
         containerList.push(container);
         container.appendChild(item);
     }
+}
+
+function makeDraggable(item) {
+    let isDragging = false;
+    let startX, startY, offsetX, offsetY;
+
+    item.addEventListener("mousedown", (e) => {
+        if (e.button !== 0) return;
+
+        document.querySelectorAll(".item.selected").forEach(el => el.classList.remove("selected"));
+        item.classList.add("selected");
+
+        isDragging = true;
+        const rect = item.getBoundingClientRect();
+        offsetX = e.clientX - rect.left;
+        offsetY = e.clientY - rect.top;
+
+        item.style.position = "fixed";
+        item.style.zIndex = "9999";
+        item.style.cursor = "grabbing";
+        e.preventDefault();
+        e.stopPropagation();
+    });
+
+    document.addEventListener("mousemove", (e) => {
+        if (!isDragging) return;
+        item.style.left = e.clientX - offsetX + "px";
+        item.style.top = e.clientY - offsetY + "px";
+    });
+
+    document.addEventListener("mouseup", () => {
+        if (isDragging) {
+            isDragging = false;
+            item.style.cursor = "grab";
+        }
+    });
 }
 
 function resize() {
@@ -144,23 +220,33 @@ function resize() {
 window.addEventListener("resize", resize);
 resize();
 
-window.addEventListener("dragenter", (event) => {
-    console.log('dragenter');
+document.addEventListener("dragenter", (event) => {
     event.preventDefault();
+    event.stopPropagation();
 });
-window.addEventListener("dragleave", (event) => {
+
+document.addEventListener("dragleave", (event) => {
     event.preventDefault();
+    event.stopPropagation();
 });
-window.addEventListener("dragend", (event) => {
+
+document.addEventListener("dragend", (event) => {
     event.preventDefault();
+    event.stopPropagation();
 });
-window.addEventListener("dragover", (event) => {
+
+document.addEventListener("dragover", (event) => {
     event.preventDefault();
+    event.stopPropagation();
 });
-window.addEventListener("drop", (event) => {
+
+document.addEventListener("drop", (event) => {
     event.preventDefault();
+    event.stopPropagation();
 
     const files = event.dataTransfer.items;
+    if (!files) return;
+
     for (let i = 0; i < files.length; i++) {
         const file = files[i];
 
@@ -172,9 +258,7 @@ window.addEventListener("drop", (event) => {
                 addFile(entry);
             }
         } else {
-            addFile(entry);
+            addFile(file);
         }
     }
-
-    cursor.classList.remove("copy");
 });
