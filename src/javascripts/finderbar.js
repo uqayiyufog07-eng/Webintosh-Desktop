@@ -1,3 +1,5 @@
+import { zIndex } from "./window.js";
+
 export let appMenu = {
     "访达": ["文件", "编辑", "显示", "前往", "窗口", "帮助"],
     "系统设置": ["编辑", "显示", "窗口", "帮助"],
@@ -72,7 +74,7 @@ export let parentMenuStates = {};
 let eventBound = false;
 
 function resetMenuHandle() {
-    let subMenus = document.querySelectorAll("div.menu");
+    let subMenus = document.querySelectorAll("div.menu:not(.contextmenu)");
 
     if (eventBound) return;
     eventBound = true;
@@ -99,6 +101,8 @@ function resetMenuHandle() {
                 subMenu.style.left = `${parentMenu.offsetLeft}px`;
                 subMenu.style.top = "25px";
                 parentMenuStates[menuKey] = true;
+                subMenu.style.zIndex = zIndex + 1;
+                zIndex += 1;
 
                 if (openingMenu && openingMenu !== subMenu) {
                     const previousMenuKey = `${openingMenu.getAttribute("menu")}_${openingMenu.getAttribute("app")}`;

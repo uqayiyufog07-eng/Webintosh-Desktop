@@ -12,8 +12,6 @@
     <link rel="stylesheet" href="./assets/stylesheets/main/desktop.css" />
     <link rel="stylesheet" href="./assets/stylesheets/cursor/cursor.css" />
     <link rel="stylesheet" href="./assets/stylesheets/ui/ui.css">
-    <link rel="stylesheet" href="./assets/stylesheets/ui/contextMenu.css">
-    <link rel="stylesheet" href="./assets/stylesheets/apps/safari.css">
 </head>
 
 <body class="cursor-default">
@@ -34,7 +32,9 @@
         ... (8 containers max)
     </div> -->
     <div class="tip" id="tip">访达</div>
-    <footer class="dock" id="dock"></footer>
+    <div class="dockcontainer">
+        <footer class="dock" id="dock"></footer>
+    </div>
     <!-- <footer>
         <div class="container" id="container">
             <img />
@@ -91,13 +91,15 @@
         import { parentMenuStates, updateMenu } from "./src/javascripts/finderbar.js";
         import { create, resetWindowListeners } from "./src/javascripts/window.js";
         import { createNotification } from "./src/javascripts/ui/notification.js";
+        import { createDesktopFile } from "./src/javascripts/ui/contextMenu.js";
 
         window.moduleItems = {
             clickMenuItem: clickMenuItem,
             parentMenuStates: parentMenuStates,
             create: create,
             resetWindowListeners: resetWindowListeners,
-            updateMenu: updateMenu
+            updateMenu: updateMenu,
+            createDesktopFile: createDesktopFile
         }
 
         let clicked = false;

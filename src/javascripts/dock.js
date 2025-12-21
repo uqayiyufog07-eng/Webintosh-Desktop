@@ -12,8 +12,10 @@ let doClose = ["启动台"];
 let appStatus = { "访达": true };
 window.appStatus = appStatus;
 export const dock = document.getElementById("dock");
+const dockcontainer = document.querySelector(".dockcontainer");
 let imgs = dock.querySelectorAll(".container img");
 let autoHide = localStorage.getItem("dock-autohide") === "on" || false;
+let dockZoom = localStorage.getItem("dock-zoom") === "off" ? false : true;
 let hideTimer = null;
 const DOCK_TRANSITION = "transform 0.4s cubic-bezier(0.25, 1, 0.5, 1)";
 let dock_zoom = false;
@@ -87,6 +89,15 @@ function init() {
         }
         updateDockVisibility();
     });
+    dock.addEventListener("animationend", () => {
+        if (dockZoom) {
+            dock.classList.add("zoom");
+        }
+    }, { once: true });
+    window.addEventListener("dock-zoom-change", (e) => {
+        console.log("Dock received zoom change:", e.detail);
+        dockZoom = e.detail === "on";
+    });
     if (!autoHide) {
         setTimeout(() => {
             dock.style.transition = DOCK_TRANSITION;
@@ -155,17 +166,15 @@ function tipSetup() {
             if (tip && !dock.classList.contains("hidden")) {
                 currentImg = img;
                 tip.textContent = img.alt;
-<<<<<<< HEAD
                 tip.style.display = "block";
                 tip.style.visibility = "hidden";
                 requestAnimationFrame(() => {
                     tip.style.visibility = "visible";
                     updateTipPosition();
                 });
-=======
-                
+
                 const rect = img.getBoundingClientRect();
-                
+
                 if (!dock_zoom) {
                     tip.style.left = rect.left + rect.width / 2 - tip.offsetWidth / 2 + 'px';
                     tip.style.top = "616px";
@@ -173,10 +182,9 @@ function tipSetup() {
                     tip.style.left = rect.left + rect.width / 2 - tip.offsetWidth / 2 + 'px';
                     tip.style.top = "580px";
                 }
->>>>>>> 9357f4cbfcfe9de0cc22139c9d4e0dc85059ef91
             }
         });
-        
+
         img.addEventListener("mouseout", () => {
             currentImg = null;
             if (tip) {
@@ -188,13 +196,13 @@ function tipSetup() {
 }
 
 function DockAnimation() {
-    dock_zoom = true;
+    // dock_zoom = true; // Remove unused variable
     const baseWidth = 50;
     const mouseRange = 200;
     const maxScale = 1.8;
     const lerpSpeed = 0.3;
     let images = [];
-    dock.addEventListener("mousemove", (e) => {
+    dockcontainer.addEventListener("mousemove", (e) => {
         images = dock.querySelectorAll(".container img");
         const mouseX = e.clientX;
         images.forEach((img) => {
@@ -203,7 +211,7 @@ function DockAnimation() {
             const rect = img.getBoundingClientRect();
             const centerX = rect.left + rect.width / 2;
             const distance = Math.abs(mouseX - centerX);
-            if (distance < mouseRange) {
+            if (dockZoom && distance < mouseRange) {
                 const distanceRatio = distance / mouseRange;
                 const scale = 1 + (maxScale - 1) * Math.sin((1 - distanceRatio) * Math.PI / 2);
                 img.targetWidth = baseWidth * scale;
@@ -223,6 +231,10 @@ function DockAnimation() {
         images.forEach(img => {
             if (typeof img.currentWidth === 'undefined') img.currentWidth = baseWidth;
             if (typeof img.targetWidth === 'undefined') img.targetWidth = baseWidth;
+
+            // Ensure we return to baseWidth if zoom is turned off
+            if (!dockZoom) img.targetWidth = baseWidth;
+
             const diff = img.targetWidth - img.currentWidth;
             if (Math.abs(diff) > 0.1) {
                 img.currentWidth += diff * lerpSpeed;
@@ -238,5 +250,6 @@ function DockAnimation() {
 init();
 DockAutoHide();
 DockAnimation();
-window.dispatchEvent(new CustomEvent("dock-autohide-change", { detail: "on" }))
+window.dispatchEvent(new CustomEvent("dock-autohide-change", { detail: "off" }));
+window.dispatchEvent(new CustomEvent("dock-zoom-change", { detail: "on" }));
 setTimeout(tipSetup, 500);

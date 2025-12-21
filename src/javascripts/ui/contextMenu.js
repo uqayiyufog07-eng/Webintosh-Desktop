@@ -1,9 +1,10 @@
 export function createContextMenu(x, y, items) {
-    const existingMenu = document.querySelector(".context-menu");
+    const existingMenu = document.querySelector("div.menu.contextmenu");
     if (existingMenu) existingMenu.remove();
 
     const menu = document.createElement("div");
-    menu.classList.add("context-menu");
+    menu.classList.add("menu", "contextmenu", "visible");
+    menu.style.opacity = "1";
     menu.style.left = x + "px";
     menu.style.top = y + "px";
 
@@ -64,7 +65,7 @@ export function createDesktopFile(type, name = "未命名") {
 
     item.appendChild(icon);
     item.appendChild(nameEl);
-    item.style.cursor = "grab";
+    // item.style.cursor = "grab";
 
     const makeDraggable = (item) => {
         let isDragging = false;
@@ -82,22 +83,26 @@ export function createDesktopFile(type, name = "未命名") {
             offsetY = e.clientY - rect.top;
 
             item.style.position = "fixed";
+            item.style.margin = "0";
+            item.style.left = (e.clientX - offsetX) + "px";
+            item.style.top = (e.clientY - offsetY) + "px";
             item.style.zIndex = "9999";
-            item.style.cursor = "grabbing";
+            // item.style.cursor = "grabbing";
             e.preventDefault();
             e.stopPropagation();
         });
 
         document.addEventListener("mousemove", (e) => {
             if (!isDragging) return;
-            item.style.left = e.clientX - offsetX + "px";
-            item.style.top = e.clientY - offsetY + "px";
+            item.style.left = (e.clientX - offsetX) + "px";
+            item.style.top = (e.clientY - offsetY) + "px";
         });
 
         document.addEventListener("mouseup", () => {
             if (isDragging) {
                 isDragging = false;
-                item.style.cursor = "grab";
+                item.style.zIndex = "0";
+                // item.style.cursor = "grab";
             }
         });
     };

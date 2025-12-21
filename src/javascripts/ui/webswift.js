@@ -2,13 +2,7 @@ var WebSwift = function (n) {
     "use strict"
     const t = function (n) {
         class t extends HTMLElement {
-            static define() { customElements.define(n.name, this) } #n = (() => {
-                const t = {}
-                for (const e in n.props || {}) {
-                    const i = this.getAttribute(e)
-                    t[e] = i || n.props?.[e]
-                } return t
-            })()
+            static define() { customElements.define(n.name, this) } #n = {}
             static observedAttributes = Object.keys(n.props ?? {})
             constructor() {
                 super()
@@ -16,9 +10,10 @@ var WebSwift = function (n) {
                     const e = new CSSStyleSheet
                     e.replaceSync(t), n.adoptedStyleSheets.push(e)
                 })(t, n.style), t.innerHTML = n.template || ""
-                for (const t in n.props) Object.defineProperty(this, t, { get: () => this.#n[t], set: e => { this.getAttribute(t) != e && n.syncProps?.includes(t) && (this.#n[t] = e, this.setAttribute(t, e), n.dispatch?.attrchanges.call(this, t, e)) } })
+                for (const e in n.props || {}) { const i = this.getAttribute(e); this.#n[e] = i || n.props[e]; if (null == i && n.syncProps?.includes(e)) this.setAttribute(e, this.#n[e]) }
+                for (const t in n.props) Object.defineProperty(this, t, { get: () => this.#n[t], set: e => { this.#n[t] != e && (this.#n[t] = e, this.getAttribute(t) != e && n.syncProps?.includes(t) && this.setAttribute(t, e), n.dispatch?.attrchanges.call(this, t, e)) } })
                 n.setup?.call(this, t)
-            } attributeChangedCallback(t, e, i) { this[t] = i ?? "", n.dispatch?.attrchanges.call(this, t, i) }
+            } attributeChangedCallback(t, e, i) { if (e !== i && this.#n[t] !== i) this[t] = i ?? "" }
         } return t
     }
     class e extends (t({

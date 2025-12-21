@@ -2,7 +2,7 @@ import { createAlert } from "./ui/alert.js";
 import { updateMenu } from "./finderbar.js";
 
 let fd = document.querySelector(".finderbar")
-let zIndex = 5;
+export let zIndex = 5;
 window.specialCloses = {};
 
 export function create(file, name, light = null, centered = false) {

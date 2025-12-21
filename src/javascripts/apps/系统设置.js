@@ -59,3 +59,20 @@ if (dockAutoHideSwitch) {
 
     observer.observe(dockAutoHideSwitch, { attributes: true });
 }
+
+const dockZoomSwitch = document.getElementById("dock-zoom");
+if (dockZoomSwitch) {
+    dockZoomSwitch.state = localStorage.getItem("dock-zoom") || "off";
+
+    const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            if (mutation.type === "attributes" && mutation.attributeName === "state") {
+                const newState = dockZoomSwitch.getAttribute("state");
+                localStorage.setItem("dock-zoom", newState);
+                window.dispatchEvent(new CustomEvent("dock-zoom-change", { detail: newState }));
+            }
+        });
+    });
+
+    observer.observe(dockZoomSwitch, { attributes: true });
+}

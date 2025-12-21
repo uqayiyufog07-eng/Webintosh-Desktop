@@ -4,14 +4,14 @@ import { createContextMenu, createDesktopFile } from './ui/contextMenu.js';
 
 const desktop = document.getElementById("desktop");
 const containers = document.querySelectorAll(".desktop .container");
-let containerList = []
+let containerList = [];
 
 containers.forEach((container) => {
     containerList.push(container);
 })
 
 document.addEventListener("mousedown", (e) => {
-    if (!e.target.closest(".item") && !e.target.closest(".context-menu")) {
+    if (!e.target.closest(".item") && !e.target.closest(".menu.contextmenu")) {
         document.querySelectorAll(".item.selected").forEach(el => el.classList.remove("selected"));
     }
 });
@@ -30,12 +30,15 @@ document.addEventListener("contextmenu", (e) => {
 
         createContextMenu(e.clientX, e.clientY, [
             { label: "新建文件夹", action: () => createDesktopFile("folder", "新建文件夹") },
-            { label: "新建文本文档", action: () => createDesktopFile("file", "新建文本文档.txt") },
+            // { label: "新建文本文档", action: () => createDesktopFile("file", "新建文本文档.txt") },
             { type: "separator" },
-            { label: "粘贴", disabled: true },
+            { label: "显示简介", disabled: true },
             { type: "separator" },
+            { label: "使用群组", action: () => console.log("使用群组") },
+            { label: "排序方式", action: () => console.log("排序方式") },
+            { label: "整理", action: () => console.log("整理") },
+            { label: "整理方式", action: () => console.log("整理方式") },
             { label: "查看显示选项", action: () => console.log("查看显示选项") },
-            { label: "排列方式", action: () => console.log("排列方式") },
         ]);
     }
 });
@@ -63,7 +66,6 @@ function getThumb(file) {
                 video.onseeked = () => {
                     const ctx = canvas.getContext('2d')
                     ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
-                    //暂停截取视频帧后立即删除
                     resolve(canvas.toDataURL())
                     video.remove()
                     canvas.remove()
@@ -88,7 +90,7 @@ function getIcon(file, callback) {
 }
 
 function addFile(file) {
-    if (containerList[containerList.length - 1].querySelectorAll(".items").length < 6) {
+    if (containerList[containerList.length - 1].querySelectorAll(".item").length < 6) {
         let item = document.createElement("div");
         item.classList.add("item");
         let icon = document.createElement("img");
@@ -97,7 +99,7 @@ function addFile(file) {
         name.innerHTML = file.name;
         item.appendChild(icon);
         item.appendChild(name);
-        item.style.cursor = "grab";
+        // item.style.cursor = "grab";
         makeDraggable(item);
         containerList[containerList.length - 1].appendChild(item);
         getIcon(file, (src) => {
@@ -115,7 +117,7 @@ function addFile(file) {
         name.innerHTML = file.name;
         item.appendChild(icon);
         item.appendChild(name);
-        item.style.cursor = "grab";
+        // item.style.cursor = "grab";
         makeDraggable(item);
         containerList.push(container);
         container.appendChild(item);
@@ -126,7 +128,7 @@ function addFile(file) {
 }
 
 function addFolder(folder) {
-    if (containerList[containerList.length - 1].querySelectorAll(".items").length < 6) {
+    if (containerList[containerList.length - 1].querySelectorAll(".item").length < 6) {
         let item = document.createElement("div");
         item.classList.add("item");
         let icon = document.createElement("img");
@@ -135,7 +137,7 @@ function addFolder(folder) {
         name.innerHTML = folder.name;
         item.appendChild(icon);
         item.appendChild(name);
-        item.style.cursor = "grab";
+        // item.style.cursor = "grab";
         makeDraggable(item);
         containerList[containerList.length - 1].appendChild(item);
     } else {
@@ -149,7 +151,7 @@ function addFolder(folder) {
         name.innerHTML = folder.name;
         item.appendChild(icon);
         item.appendChild(name);
-        item.style.cursor = "grab";
+        // item.style.cursor = "grab";
         makeDraggable(item);
         containerList.push(container);
         container.appendChild(item);
@@ -172,6 +174,9 @@ function makeDraggable(item) {
         offsetY = e.clientY - rect.top;
 
         item.style.position = "fixed";
+        item.style.margin = "0";
+        item.style.left = (e.clientX - offsetX) + "px";
+        item.style.top = (e.clientY - offsetY) + "px";
         item.style.zIndex = "9999";
         item.style.cursor = "grabbing";
         e.preventDefault();
@@ -187,7 +192,8 @@ function makeDraggable(item) {
     document.addEventListener("mouseup", () => {
         if (isDragging) {
             isDragging = false;
-            item.style.cursor = "grab";
+            item.style.zIndex = "0";
+            // item.style.cursor = "grab";
         }
     });
 }

@@ -1,4 +1,5 @@
 import { parentMenuStates } from "../finderbar.js";
+import { zIndex } from "../window.js";
 
 export function clickMenuItem(item) {
     let cmd = item.getAttribute("cmd");
@@ -9,4 +10,6 @@ export function clickMenuItem(item) {
     activeMenu.classList.remove("active");
     let func = new Function(cmd);
     func();
+    // parentMenu.style.zIndex = zIndex + 1;
+    // zIndex += 1;
 }
